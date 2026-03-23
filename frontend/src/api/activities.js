@@ -1,0 +1,8 @@
+import client from './client';
+
+export const getActivities = (params) => client.get('/activities', { params });
+export const getActivity = (id) => client.get(`/activities/${id}`);
+export const createActivity = (data) => client.post('/activities', data);
+export const updateActivity = (id, data) => client.put(`/activities/${id}`, data);
+export const deleteActivity = (id) => client.delete(`/activities/${id}`);
+export const getLeadActivities = (leadId) => client.get(`/leads/${leadId}/activities`);
