@@ -1,0 +1,112 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #0ea5e9 100%);
+  padding: 20px;
+}
+
+.login-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.login-logo-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #1e40af, #0ea5e9);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1e40af;
+  text-align: center;
+}
+
+.login-subtitle {
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 32px;
+  font-size: 14px;
+}
+
+.login-form { display: flex; flex-direction: column; gap: 4px; }
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #1e40af, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.login-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(30,64,175,0.4); }
+.login-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.login-error {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.demo-credentials {
+  margin-top: 24px;
+  padding: 14px;
+  background: #eff6ff;
+  border-radius: 8px;
+  border: 1px solid #bfdbfe;
+}
+
+.demo-credentials p {
+  font-size: 12px;
+  color: #1e40af;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.demo-credentials span {
+  display: block;
+  font-size: 12px;
+  color: #3b82f6;
+  font-family: monospace;
+}
+
+@media (max-width: 480px) {
+  .login-card { padding: 28px 20px; }
+}
