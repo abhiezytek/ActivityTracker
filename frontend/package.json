@@ -15,6 +15,7 @@
     "@tanstack/react-table": "^8.21.3",
     "axios": "^1.13.6",
     "date-fns": "^4.1.0",
+    "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
     "lucide-react": "^0.577.0",
     "react": "^19.2.4",
@@ -25,7 +26,6 @@
     "react-select": "^5.10.2",
     "react-toastify": "^11.0.5",
     "recharts": "^3.8.0",
-    "xlsx": "^0.18.5",
     "yup": "^1.7.1"
   },
   "devDependencies": {

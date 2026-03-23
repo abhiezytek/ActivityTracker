@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const XLSX = require('xlsx');
+const ExcelJS = require('exceljs');
 const Lead = require('../models/Lead');
 const Notification = require('../models/Notification');
 const { query } = require('../config/db');
@@ -157,10 +157,26 @@ const uploadLeads = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'No file uploaded' });
     }
 
-    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-    const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load(req.file.buffer);
+    const worksheet = workbook.worksheets[0];
+    if (!worksheet) {
+      return res.status(400).json({ success: false, message: 'Excel file is empty' });
+    }
+
+    const rows = [];
+    let headers = null;
+    worksheet.eachRow((row, rowNumber) => {
+      const values = row.values.slice(1); // row.values[0] is always undefined in exceljs
+      if (rowNumber === 1) {
+        headers = values.map(v => String(v || '').toLowerCase().trim());
+        return;
+      }
+      if (!headers) return;
+      const obj = {};
+      headers.forEach((h, i) => { obj[h] = values[i] !== undefined && values[i] !== null ? values[i] : ''; });
+      rows.push(obj);
+    });
 
     if (!rows.length) {
       return res.status(400).json({ success: false, message: 'Excel file is empty' });

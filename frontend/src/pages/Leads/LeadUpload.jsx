@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Download, Upload, CheckCircle, XCircle } from 'lucide-react';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 import { uploadLeads } from '../../api/leads';
 import Button from '../../components/Common/Button';
 import Card from '../../components/Common/Card';
@@ -20,30 +21,40 @@ const LeadUpload = () => {
   const handleFile = (file) => {
     if (!file) { setParsedData(null); setErrors([]); return; }
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       try {
-        const wb = XLSX.read(e.target.result, { type: 'binary' });
-        const ws = wb.Sheets[wb.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
-        if (data.length < 2) { setErrors(['File is empty or has no data rows']); return; }
-        const headers = data[0].map(h => h?.toString().toLowerCase().trim());
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(e.target.result);
+        const worksheet = workbook.worksheets[0];
+        if (!worksheet || worksheet.rowCount < 2) {
+          setErrors(['File is empty or has no data rows']);
+          return;
+        }
+        let headers = null;
+        const rows = [];
+        worksheet.eachRow((row, rowNumber) => {
+          const values = row.values.slice(1);
+          if (rowNumber === 1) {
+            headers = values.map(v => String(v || '').toLowerCase().trim());
+            return;
+          }
+          if (!headers) return;
+          const obj = {};
+          headers.forEach((h, i) => { obj[h] = values[i] !== undefined && values[i] !== null ? String(values[i]) : ''; });
+          if (Object.values(obj).some(v => v !== '')) rows.push(obj);
+        });
         const rowErrors = [];
         REQUIRED_COLUMNS.forEach(col => {
-          if (!headers.includes(col)) rowErrors.push(`Missing required column: ${col}`);
+          if (!headers || !headers.includes(col)) rowErrors.push(`Missing required column: ${col}`);
         });
         if (rowErrors.length) { setErrors(rowErrors); setParsedData(null); return; }
-        const rows = data.slice(1).map(row => {
-          const obj = {};
-          headers.forEach((h, i) => { obj[h] = row[i] ?? ''; });
-          return obj;
-        }).filter(row => Object.values(row).some(v => v !== ''));
-        setParsedData({ headers, rows });
+        setParsedData({ headers, rows, file });
         setErrors([]);
       } catch (err) {
         setErrors(['Failed to parse file: ' + err.message]);
       }
     };
-    reader.readAsBinaryString(file);
+    reader.readAsArrayBuffer(file);
   };
 
   const handleUpload = async () => {
@@ -51,11 +62,7 @@ const LeadUpload = () => {
     setUploading(true);
     try {
       const formData = new FormData();
-      const ws = XLSX.utils.aoa_to_sheet([[...parsedData.headers], ...parsedData.rows.map(r => parsedData.headers.map(h => r[h]))]);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Leads');
-      const blob = new Blob([XLSX.write(wb, { bookType: 'xlsx', type: 'array' })], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      formData.append('file', blob, 'leads.xlsx');
+      formData.append('file', parsedData.file, parsedData.file.name);
       await uploadLeads(formData);
       setUploaded(true);
       toast.success(`Successfully uploaded ${parsedData.rows.length} leads`);
@@ -66,14 +73,13 @@ const LeadUpload = () => {
     }
   };
 
-  const downloadTemplate = () => {
-    const ws = XLSX.utils.aoa_to_sheet([
-      ['customer_name', 'phone', 'email', 'status', 'source', 'product_type', 'notes'],
-      ['John Smith', '+1-555-0100', 'john@example.com', 'new', 'referral', 'Life Insurance', 'Interested in term life'],
-    ]);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Leads Template');
-    XLSX.writeFile(wb, 'leads_template.xlsx');
+  const downloadTemplate = async () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Leads Template');
+    worksheet.addRow(['customer_name', 'phone', 'email', 'status', 'source', 'product_type', 'notes']);
+    worksheet.addRow(['John Smith', '+1-555-0100', 'john@example.com', 'new', 'referral', 'Life Insurance', 'Interested in term life']);
+    const buffer = await workbook.xlsx.writeBuffer();
+    saveAs(new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), 'leads_template.xlsx');
   };
 
   return (
