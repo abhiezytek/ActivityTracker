@@ -10,6 +10,7 @@ A full-stack web application for Insurance Sales Activity Tracking, built with *
 |---|---|
 | Frontend | React 19 + Vite, React Router, React Query, Recharts |
 | Backend | Node.js, Express 4, JWT, bcrypt |
+| .NET API | ASP.NET Core 8, Dapper, JWT, Swashbuckle (Swagger) |
 | Database | MySQL 8 (no ORM — raw `mysql2` queries) |
 | API Docs | Swagger UI at `/api/docs` |
 
@@ -20,6 +21,7 @@ A full-stack web application for Insurance Sales Activity Tracking, built with *
 ### Prerequisites
 - Node.js 18+
 - MySQL 8+
+- .NET 8 SDK (for the .NET API)
 
 ### 1. Database Setup
 ```bash
@@ -27,7 +29,7 @@ mysql -u root -p < backend/database/schema.sql
 mysql -u root -p activity_tracker < backend/database/seed.sql
 ```
 
-### 2. Backend
+### 2. Backend (Node.js)
 ```bash
 cd backend
 cp .env.example .env        # Edit DB credentials and JWT secret
@@ -35,7 +37,16 @@ npm install
 npm run dev                 # Starts on http://localhost:5000
 ```
 
-### 3. Frontend
+### 3. .NET API
+```bash
+cd dotnet-api
+cp appsettings.example.json appsettings.json  # Edit DB credentials and JWT secret
+dotnet run                  # Starts on http://localhost:5112
+```
+
+Swagger UI is available at: `http://localhost:5112/api/docs`
+
+### 4. Frontend
 ```bash
 cd frontend
 npm install
@@ -78,7 +89,13 @@ npm run dev                 # Starts on http://localhost:5173
 
 ## API Documentation
 
+### Node.js Backend
 Swagger UI is available at: `http://localhost:5000/api/docs`
+
+### .NET API
+Swagger UI is available at: `http://localhost:5112/api/docs`
+
+The .NET API provides full OpenAPI documentation including JWT Bearer authentication support. Use the **Authorize** button in Swagger UI to enter your JWT token and test protected endpoints.
 
 ### Key Endpoints
 | Method | Path | Description |

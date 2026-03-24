@@ -76,6 +76,12 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Insurance Sales Activity Tracking System - .NET Web API"
     });
 
+    // Include XML comments for enriched API documentation
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+        c.IncludeXmlComments(xmlPath);
+
     // JWT bearer authentication in Swagger UI
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
