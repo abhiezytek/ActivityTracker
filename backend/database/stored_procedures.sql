@@ -660,6 +660,12 @@ BEGIN
   SELECT LAST_INSERT_ID() AS insert_id;
 END$$
 
+DROP PROCEDURE IF EXISTS sp_GetNotificationById$$
+CREATE PROCEDURE sp_GetNotificationById(IN p_notification_id INT UNSIGNED)
+BEGIN
+  SELECT * FROM notifications WHERE notification_id = p_notification_id;
+END$$
+
 DROP PROCEDURE IF EXISTS sp_MarkNotificationRead$$
 CREATE PROCEDURE sp_MarkNotificationRead(
   IN p_notification_id INT UNSIGNED,

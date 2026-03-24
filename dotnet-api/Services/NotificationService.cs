@@ -50,8 +50,9 @@ public class NotificationService : INotificationService
         if (result == null) return null;
 
         return await conn.QueryFirstOrDefaultAsync<Notification>(
-            "SELECT * FROM notifications WHERE notification_id = @id",
-            new { id = (uint)result.insert_id });
+            "sp_GetNotificationById",
+            new { p_notification_id = (uint)result.insert_id },
+            commandType: System.Data.CommandType.StoredProcedure);
     }
 
     public async Task<Notification?> MarkReadAsync(uint notificationId, uint userId)
