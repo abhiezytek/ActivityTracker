@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getToken, clearAuth } from '../utils/storage';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://ezytek1706-003-site7.rtempurl.com/api';
 
 const client = axios.create({
   baseURL: API_URL,

@@ -87,7 +87,7 @@ const Login = () => {
         <div className="demo-credentials">
           <p>Demo Credentials:</p>
           <span>Email: admin@example.com</span>
-          <span>Password: Admin@123</span>
+          <span>Password: Admin123</span>
         </div>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
