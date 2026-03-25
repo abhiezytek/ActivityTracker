@@ -75,8 +75,8 @@ const Lead = {
 
   async create(data) {
     const result = await query(
-      `INSERT INTO leads (customer_name, phone, email, product_type_id, source, status, sub_status, assigned_to, created_by)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO leads (customer_name, phone, email, product_type_id, source, status, sub_status, assigned_to, created_by, notes, expected_premium)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         data.customer_name,
         data.phone,
@@ -86,7 +86,9 @@ const Lead = {
         data.status || 'New',
         data.sub_status || null,
         data.assigned_to || null,
-        data.created_by || null
+        data.created_by || null,
+        data.notes || null,
+        data.expected_premium || 0.00
       ]
     );
     return Lead.findById(result.insertId);
@@ -96,7 +98,7 @@ const Lead = {
     const fields = [];
     const params = [];
 
-    const allowed = ['customer_name', 'phone', 'email', 'product_type_id', 'source', 'status', 'sub_status', 'assigned_to'];
+    const allowed = ['customer_name', 'phone', 'email', 'product_type_id', 'source', 'status', 'sub_status', 'assigned_to', 'notes', 'expected_premium'];
     for (const key of allowed) {
       if (data[key] !== undefined) {
         fields.push(`${key} = ?`);

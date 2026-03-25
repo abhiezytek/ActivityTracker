@@ -13,9 +13,10 @@ public interface ILeadService
         string? search, int page, int limit);
     Task<Lead?> CreateAsync(string customerName, string phone, string? email,
         uint? productTypeId, string source, string status, string? subStatus,
-        uint? assignedTo, uint? createdBy);
+        uint? assignedTo, uint? createdBy, string? notes, decimal? expectedPremium);
     Task<Lead?> UpdateAsync(uint id, string? customerName, string? phone, string? email,
-        uint? productTypeId, string? source, string? status, string? subStatus, uint? assignedTo);
+        uint? productTypeId, string? source, string? status, string? subStatus, uint? assignedTo,
+        string? notes, decimal? expectedPremium);
     Task SoftDeleteAsync(uint id);
     Task AssignAsync(uint id, uint assignedTo);
 }
@@ -90,7 +91,7 @@ public class LeadService : ILeadService
 
     public async Task<Lead?> CreateAsync(string customerName, string phone, string? email,
         uint? productTypeId, string source, string status, string? subStatus,
-        uint? assignedTo, uint? createdBy)
+        uint? assignedTo, uint? createdBy, string? notes, decimal? expectedPremium)
     {
         using var conn = _dbFactory.CreateConnection();
         await conn.OpenAsync();
@@ -106,7 +107,9 @@ public class LeadService : ILeadService
                 p_status = status,
                 p_sub_status = subStatus,
                 p_assigned_to = assignedTo,
-                p_created_by = createdBy
+                p_created_by = createdBy,
+                p_notes = notes,
+                p_expected_premium = expectedPremium
             },
             commandType: System.Data.CommandType.StoredProcedure);
 
@@ -115,7 +118,8 @@ public class LeadService : ILeadService
     }
 
     public async Task<Lead?> UpdateAsync(uint id, string? customerName, string? phone, string? email,
-        uint? productTypeId, string? source, string? status, string? subStatus, uint? assignedTo)
+        uint? productTypeId, string? source, string? status, string? subStatus, uint? assignedTo,
+        string? notes, decimal? expectedPremium)
     {
         using var conn = _dbFactory.CreateConnection();
         await conn.OpenAsync();
@@ -131,7 +135,9 @@ public class LeadService : ILeadService
                 p_source = source,
                 p_status = status,
                 p_sub_status = subStatus,
-                p_assigned_to = assignedTo
+                p_assigned_to = assignedTo,
+                p_notes = notes,
+                p_expected_premium = expectedPremium
             },
             commandType: System.Data.CommandType.StoredProcedure);
 

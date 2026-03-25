@@ -27,6 +27,8 @@ public class Lead
     public string? SubStatus { get; set; }
     public uint? AssignedTo { get; set; }
     public uint? CreatedBy { get; set; }
+    public string? Notes { get; set; }
+    public decimal ExpectedPremium { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
