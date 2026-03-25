@@ -7,6 +7,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ── Dapper global configuration ────────────────────────────────────────────────
+// Map snake_case SQL column names (e.g. user_id) to PascalCase C# properties (e.g. UserId)
+Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
 // ── Services ──────────────────────────────────────────────────────────────────
 
 builder.Services.AddControllers()
