@@ -67,7 +67,7 @@ const createLead = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
     }
 
-    const { customer_name, phone, email, product_type_id, source, status, sub_status, assigned_to } = req.body;
+    const { customer_name, phone, email, product_type_id, source, status, sub_status, assigned_to, notes, expected_premium } = req.body;
 
     const lead = await Lead.create({
       customer_name,
@@ -78,7 +78,9 @@ const createLead = async (req, res, next) => {
       status: status || 'New',
       sub_status,
       assigned_to: assigned_to || req.user.user_id,
-      created_by: req.user.user_id
+      created_by: req.user.user_id,
+      notes: notes || null,
+      expected_premium: expected_premium || 0.00
     });
 
     res.locals.createdId = lead.lead_id;

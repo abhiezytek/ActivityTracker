@@ -88,6 +88,8 @@ public class CreateLeadRequest
     public string Status { get; set; } = "New";
     public string? SubStatus { get; set; }
     public uint? AssignedTo { get; set; }
+    public string? Notes { get; set; }
+    public decimal? ExpectedPremium { get; set; }
 }
 
 public class UpdateLeadRequest
@@ -100,6 +102,8 @@ public class UpdateLeadRequest
     public string? Status { get; set; }
     public string? SubStatus { get; set; }
     public uint? AssignedTo { get; set; }
+    public string? Notes { get; set; }
+    public decimal? ExpectedPremium { get; set; }
 }
 
 public class AssignLeadRequest

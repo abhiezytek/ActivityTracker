@@ -72,7 +72,7 @@ public class LeadsController : ControllerBase
         var lead = await _leadService.CreateAsync(
             request.CustomerName, request.Phone, request.Email,
             request.ProductTypeId, request.Source, request.Status, request.SubStatus,
-            request.AssignedTo, userId);
+            request.AssignedTo, userId, request.Notes, request.ExpectedPremium);
 
         return StatusCode(201, new { success = true, data = lead });
     }
@@ -106,7 +106,7 @@ public class LeadsController : ControllerBase
         var updated = await _leadService.UpdateAsync(id,
             request.CustomerName, request.Phone, request.Email,
             request.ProductTypeId, request.Source, request.Status,
-            request.SubStatus, request.AssignedTo);
+            request.SubStatus, request.AssignedTo, request.Notes, request.ExpectedPremium);
 
         return Ok(new { success = true, data = updated });
     }

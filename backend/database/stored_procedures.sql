@@ -210,45 +210,51 @@ END$$
 
 DROP PROCEDURE IF EXISTS sp_CreateLead$$
 CREATE PROCEDURE sp_CreateLead(
-  IN p_customer_name   VARCHAR(200),
-  IN p_phone           VARCHAR(30),
-  IN p_email           VARCHAR(255),
-  IN p_product_type_id INT UNSIGNED,
-  IN p_source          VARCHAR(50),
-  IN p_status          VARCHAR(50),
-  IN p_sub_status      VARCHAR(100),
-  IN p_assigned_to     INT UNSIGNED,
-  IN p_created_by      INT UNSIGNED
+  IN p_customer_name    VARCHAR(200),
+  IN p_phone            VARCHAR(30),
+  IN p_email            VARCHAR(255),
+  IN p_product_type_id  INT UNSIGNED,
+  IN p_source           VARCHAR(50),
+  IN p_status           VARCHAR(50),
+  IN p_sub_status       VARCHAR(100),
+  IN p_assigned_to      INT UNSIGNED,
+  IN p_created_by       INT UNSIGNED,
+  IN p_notes            TEXT,
+  IN p_expected_premium DECIMAL(15,2)
 )
 BEGIN
-  INSERT INTO leads (customer_name, phone, email, product_type_id, source, status, sub_status, assigned_to, created_by)
-  VALUES (p_customer_name, p_phone, p_email, p_product_type_id, p_source, p_status, p_sub_status, p_assigned_to, p_created_by);
+  INSERT INTO leads (customer_name, phone, email, product_type_id, source, status, sub_status, assigned_to, created_by, notes, expected_premium)
+  VALUES (p_customer_name, p_phone, p_email, p_product_type_id, p_source, p_status, p_sub_status, p_assigned_to, p_created_by, p_notes, COALESCE(p_expected_premium, 0.00));
   SELECT LAST_INSERT_ID() AS insert_id;
 END$$
 
 DROP PROCEDURE IF EXISTS sp_UpdateLead$$
 CREATE PROCEDURE sp_UpdateLead(
-  IN p_lead_id         INT UNSIGNED,
-  IN p_customer_name   VARCHAR(200),
-  IN p_phone           VARCHAR(30),
-  IN p_email           VARCHAR(255),
-  IN p_product_type_id INT UNSIGNED,
-  IN p_source          VARCHAR(50),
-  IN p_status          VARCHAR(50),
-  IN p_sub_status      VARCHAR(100),
-  IN p_assigned_to     INT UNSIGNED
+  IN p_lead_id          INT UNSIGNED,
+  IN p_customer_name    VARCHAR(200),
+  IN p_phone            VARCHAR(30),
+  IN p_email            VARCHAR(255),
+  IN p_product_type_id  INT UNSIGNED,
+  IN p_source           VARCHAR(50),
+  IN p_status           VARCHAR(50),
+  IN p_sub_status       VARCHAR(100),
+  IN p_assigned_to      INT UNSIGNED,
+  IN p_notes            TEXT,
+  IN p_expected_premium DECIMAL(15,2)
 )
 BEGIN
   UPDATE leads
   SET
-    customer_name   = COALESCE(p_customer_name,   customer_name),
-    phone           = COALESCE(p_phone,           phone),
-    email           = COALESCE(p_email,           email),
-    product_type_id = COALESCE(p_product_type_id, product_type_id),
-    source          = COALESCE(p_source,          source),
-    status          = COALESCE(p_status,          status),
-    sub_status      = COALESCE(p_sub_status,      sub_status),
-    assigned_to     = COALESCE(p_assigned_to,     assigned_to)
+    customer_name    = COALESCE(p_customer_name,    customer_name),
+    phone            = COALESCE(p_phone,            phone),
+    email            = COALESCE(p_email,            email),
+    product_type_id  = COALESCE(p_product_type_id,  product_type_id),
+    source           = COALESCE(p_source,           source),
+    status           = COALESCE(p_status,           status),
+    sub_status       = COALESCE(p_sub_status,       sub_status),
+    assigned_to      = COALESCE(p_assigned_to,      assigned_to),
+    notes            = COALESCE(p_notes,            notes),
+    expected_premium = COALESCE(p_expected_premium, expected_premium)
   WHERE lead_id = p_lead_id;
 END$$
 
