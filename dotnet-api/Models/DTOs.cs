@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ActivityTrackerAPI.Models.DTOs;
 
@@ -31,12 +32,25 @@ public class LoginResponse
 
 public class UserInfo
 {
+    [JsonPropertyName("user_id")]
     public uint UserId { get; set; }
+
+    [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("email")]
     public string Email { get; set; } = string.Empty;
+
+    [JsonPropertyName("role_name")]
     public string RoleName { get; set; } = string.Empty;
+
+    [JsonPropertyName("role_id")]
     public uint RoleId { get; set; }
+
+    [JsonPropertyName("branch_id")]
     public uint? BranchId { get; set; }
+
+    [JsonPropertyName("branch_name")]
     public string? BranchName { get; set; }
 }
 
@@ -282,8 +296,15 @@ public class PagedApiResponse<T>
 
 public class PaginationMeta
 {
+    [JsonPropertyName("page")]
     public int Page { get; set; }
+
+    [JsonPropertyName("limit")]
     public int Limit { get; set; }
+
+    [JsonPropertyName("total")]
     public int Total { get; set; }
+
+    [JsonPropertyName("total_pages")]
     public int TotalPages { get; set; }
 }
