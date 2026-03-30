@@ -84,7 +84,9 @@ const login = async (req, res, next) => {
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '24h'
+      expiresIn: process.env.JWT_EXPIRES_IN || '24h',
+      issuer: process.env.JWT_ISSUER || 'ActivityTrackerAPI',
+      audience: process.env.JWT_AUDIENCE || 'ActivityTrackerClient'
     });
 
     // Generate renewal notifications in background
