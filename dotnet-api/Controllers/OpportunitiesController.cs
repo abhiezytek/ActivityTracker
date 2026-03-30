@@ -9,7 +9,7 @@ namespace ActivityTrackerAPI.Controllers;
 /// <summary>Sales opportunity management endpoints</summary>
 [ApiController]
 [Route("api/opportunities")]
-//[Authorize]
+[Authorize]
 [Produces("application/json")]
 public class OpportunitiesController : ControllerBase
 {

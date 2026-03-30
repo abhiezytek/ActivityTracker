@@ -9,7 +9,7 @@ namespace ActivityTrackerAPI.Controllers;
 /// <summary>Insurance policy management endpoints</summary>
 [ApiController]
 [Route("api/policies")]
-//[Authorize]
+[Authorize]
 [Produces("application/json")]
 public class PoliciesController : ControllerBase
 {
