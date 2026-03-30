@@ -1,15 +1,49 @@
 using ActivityTrackerAPI.Middleware;
+using ActivityTrackerAPI.Models;
 using ActivityTrackerAPI.Services;
+using Dapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ── Dapper global configuration ────────────────────────────────────────────────
-// Map snake_case SQL column names (e.g. user_id) to PascalCase C# properties (e.g. UserId)
-Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+// ── Dapper column mapping ──────────────────────────────────────────────────────
+// Use [Column("column_name")] attributes on entity properties to explicitly map
+// stored procedure output column names to C# entity properties.
+static void RegisterColumnMappings(params Type[] types)
+{
+    foreach (var type in types)
+    {
+        SqlMapper.SetTypeMap(type, new CustomPropertyTypeMap(
+            type, GetPropertyByColumnAttribute));
+    }
+}
+
+// Returns the property whose [Column] name matches the given column name,
+// or null to let Dapper silently skip unmapped result-set columns.
+static PropertyInfo GetPropertyByColumnAttribute(Type type, string columnName) =>
+    type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+        .FirstOrDefault(p =>
+            string.Equals(
+                p.GetCustomAttribute<ColumnAttribute>()?.Name,
+                columnName,
+                StringComparison.OrdinalIgnoreCase))!;
+
+RegisterColumnMappings(
+    typeof(User),
+    typeof(Lead),
+    typeof(Activity),
+    typeof(Opportunity),
+    typeof(Policy),
+    typeof(Notification),
+    typeof(Role),
+    typeof(ProductType),
+    typeof(LeadSubStatus),
+    typeof(RenewalPolicy));
 
 // ── Services ──────────────────────────────────────────────────────────────────
 
