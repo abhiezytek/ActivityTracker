@@ -9,7 +9,10 @@ const authenticate = async (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+      issuer: process.env.JWT_ISSUER || 'ActivityTrackerAPI',
+      audience: process.env.JWT_AUDIENCE || 'ActivityTrackerClient'
+    });
 
     const users = await query(
       `SELECT u.user_id, u.name, u.email, u.role_id, u.branch_id, u.is_active,
