@@ -76,12 +76,29 @@ const LeadForm = () => {
   const subStatuses = subStatusesData?.subStatuses || subStatusesData || [];
 
   const onSubmit = async (data) => {
-    if (isEdit) {
-      await updateMutation.mutateAsync({ id, data });
-    } else {
-      await createMutation.mutateAsync(data);
+    try {
+      const payload = {
+        customer_name: data.customerName,
+        phone: data.phone,
+        email: data.email || undefined,
+        status: data.status,
+        source: data.source,
+        product_type_id: data.productTypeId || undefined,
+        assigned_to: data.assignedToId || undefined,
+        notes: data.notes || undefined,
+        expected_premium: data.expectedPremium || undefined,
+      };
+      if (isEdit) {
+        await updateMutation.mutateAsync({ id, data: payload });
+      } else {
+        await createMutation.mutateAsync(payload);
+      }
+      navigate('/leads');
+    } catch (err) {
+      // mutation errors are already handled by onError (toast notification);
+      // log unexpected errors for debugging
+      console.error('LeadForm submit error:', err);
     }
-    navigate('/leads');
   };
 
   if (isEdit && leadLoading) return <div style={{ padding: '40px', textAlign: 'center' }}>Loading...</div>;

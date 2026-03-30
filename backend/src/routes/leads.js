@@ -82,10 +82,10 @@ router.post(
   [
     body('customer_name').trim().notEmpty().withMessage('Customer name is required'),
     body('phone').trim().notEmpty().withMessage('Phone is required'),
-    body('source').isIn(['online', 'referral', 'walk-in']).withMessage('Invalid source'),
-    body('email').optional().isEmail().normalizeEmail(),
-    body('product_type_id').optional().isInt({ min: 1 }),
-    body('assigned_to').optional().isInt({ min: 1 })
+    body('source').isIn(['website', 'referral', 'cold_call', 'social_media', 'advertisement', 'agent', 'other']).withMessage('Invalid source'),
+    body('email').optional({ nullable: true, checkFalsy: true }).isEmail().normalizeEmail(),
+    body('product_type_id').optional({ nullable: true, checkFalsy: true }).isInt({ min: 1 }),
+    body('assigned_to').optional({ nullable: true, checkFalsy: true }).isInt({ min: 1 })
   ],
   createLead
 );
@@ -155,8 +155,8 @@ router.put(
   authenticate,
   auditMiddleware,
   [
-    body('source').optional().isIn(['online', 'referral', 'walk-in']),
-    body('status').optional().isIn(['New', 'Contacted', 'Qualified', 'Proposal', 'Closed']),
+    body('source').optional().isIn(['website', 'referral', 'cold_call', 'social_media', 'advertisement', 'agent', 'other']),
+    body('status').optional().isIn(['new', 'contacted', 'qualified', 'proposal', 'negotiation', 'closed_won', 'closed_lost']),
     body('email').optional().isEmail().normalizeEmail(),
     body('product_type_id').optional().isInt({ min: 1 }),
     body('assigned_to').optional().isInt({ min: 1 })
