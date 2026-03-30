@@ -8,7 +8,7 @@ namespace ActivityTrackerAPI.Controllers;
 /// <summary>Dashboard KPIs and analytics endpoints</summary>
 [ApiController]
 [Route("api/dashboard")]
-//[Authorize]
+[Authorize]
 [Produces("application/json")]
 public class DashboardController : ControllerBase
 {

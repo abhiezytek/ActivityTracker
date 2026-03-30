@@ -26,6 +26,14 @@ const inputStyle = { width: '100%', padding: '9px 12px', border: '1px solid var(
 const selectStyle = { ...inputStyle, cursor: 'pointer' };
 const errorStyle = { color: 'var(--danger)', fontSize: '12px', marginTop: '4px' };
 
+const FormField = ({ label, error, children, required }) => (
+  <div style={fieldStyle}>
+    <label style={labelStyle}>{label}{required && <span style={{ color: 'var(--danger)', marginLeft: '2px' }}>*</span>}</label>
+    {children}
+    {error && <p style={errorStyle}>{error}</p>}
+  </div>
+);
+
 const LeadForm = () => {
   const { id } = useParams();
   const isEdit = Boolean(id);
@@ -76,23 +84,20 @@ const LeadForm = () => {
   const subStatuses = subStatusesData?.subStatuses || subStatusesData || [];
 
   const onSubmit = async (data) => {
-    if (isEdit) {
-      await updateMutation.mutateAsync({ id, data });
-    } else {
-      await createMutation.mutateAsync(data);
+    try {
+      if (isEdit) {
+        await updateMutation.mutateAsync({ id, data });
+      } else {
+        await createMutation.mutateAsync(data);
+      }
+      navigate('/leads');
+    } catch (error) {
+      // errors are handled by the mutation's onError callback
+      console.error('Lead save error:', error);
     }
-    navigate('/leads');
   };
 
   if (isEdit && leadLoading) return <div style={{ padding: '40px', textAlign: 'center' }}>Loading...</div>;
-
-  const FormField = ({ label, error, children, required }) => (
-    <div style={fieldStyle}>
-      <label style={labelStyle}>{label}{required && <span style={{ color: 'var(--danger)', marginLeft: '2px' }}>*</span>}</label>
-      {children}
-      {error && <p style={errorStyle}>{error}</p>}
-    </div>
-  );
 
   return (
     <div style={{ maxWidth: '800px' }}>

@@ -9,7 +9,7 @@ namespace ActivityTrackerAPI.Controllers;
 /// <summary>Lead management endpoints</summary>
 [ApiController]
 [Route("api/leads")]
-//[Authorize]
+[Authorize]
 [Produces("application/json")]
 public class LeadsController : ControllerBase
 {

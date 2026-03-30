@@ -10,7 +10,7 @@ namespace ActivityTrackerAPI.Controllers;
 /// <summary>System configuration management endpoints</summary>
 [ApiController]
 [Route("api/config")]
-//[Authorize]
+[Authorize]
 [Produces("application/json")]
 public class ConfigController : ControllerBase
 {
