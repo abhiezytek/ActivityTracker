@@ -8,7 +8,7 @@ namespace ActivityTrackerAPI.Controllers;
 /// <summary>Notification management endpoints</summary>
 [ApiController]
 [Route("api/notifications")]
-[Authorize]
+//[Authorize]
 [Produces("application/json")]
 public class NotificationsController : ControllerBase
 {

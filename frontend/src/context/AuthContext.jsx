@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await loginApi(credentials);
+      debugger;
       const { token: newToken, user: userData } = response.data;
       setToken(newToken);
       setUser(userData);

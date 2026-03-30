@@ -9,7 +9,7 @@ namespace ActivityTrackerAPI.Controllers;
 /// <summary>User management endpoints</summary>
 [ApiController]
 [Route("api/users")]
-[Authorize]
+//[Authorize]
 [Produces("application/json")]
 public class UsersController : ControllerBase
 {

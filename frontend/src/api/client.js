@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { getToken, clearAuth } from '../utils/storage';
+import { de } from 'date-fns/locale';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://ezytek1706-003-site7.rtempurl.com/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5112/api';
 
 const client = axios.create({
   baseURL: API_URL,
@@ -23,6 +24,7 @@ client.interceptors.request.use(
 client.interceptors.response.use(
   (response) => response,
   (error) => {
+    debugger;
     if (error.response?.status === 401) {
       clearAuth();
       window.location.href = '/login';

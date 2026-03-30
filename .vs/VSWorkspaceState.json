@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\dotnet-api"
+    "\\dotnet-api",
+    "\\dotnet-api\\Models"
   ],
   "PreviewInSolutionExplorer": false
 }

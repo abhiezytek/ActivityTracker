@@ -92,7 +92,7 @@ public class AuthController : ControllerBase
 
     /// <summary>Get current authenticated user profile</summary>
     [HttpGet("me")]
-    [Authorize]
+    //[Authorize]
     [ProducesResponseType(200)]
     [ProducesResponseType(401)]
     public async Task<IActionResult> GetMe()
@@ -123,7 +123,7 @@ public class AuthController : ControllerBase
 
     /// <summary>Logout (client-side token invalidation)</summary>
     [HttpPost("logout")]
-    [Authorize]
+    //[Authorize]
     [ProducesResponseType(200)]
     public IActionResult Logout()
     {
@@ -132,7 +132,7 @@ public class AuthController : ControllerBase
 
     /// <summary>Change current user's password</summary>
     [HttpPost("change-password")]
-    [Authorize]
+    //[Authorize]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
